@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NuntiusDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="idConversation" />
+          </Key>
+          <Property Name="idConversation" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ConversationUser">
+          <Key>
+            <PropertyRef Name="idConversationUser" />
+          </Key>
+          <Property Name="idConversationUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idUser" Type="int" Nullable="false" />
+          <Property Name="idConversation" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="idFriendship" />
+          </Key>
+          <Property Name="idFriendship" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idUser" Type="int" Nullable="false" />
+          <Property Name="idFriend" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="idMessage" />
+          </Key>
+          <Property Name="idMessage" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idSender" Type="int" Nullable="false" />
+          <Property Name="message" Type="varchar(max)" Nullable="false" />
+          <Property Name="timestamp" Type="datetime" Nullable="false" />
+          <Property Name="idConversation" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="photo" Type="image" />
+          <Property Name="status" Type="int" />
+          <Property Name="points" Type="int" />
+        </EntityType>
+        <Association Name="FK_ConversacionUsuario_ConversacionUsuario">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="ConversationUser" Type="Self.ConversationUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="ConversationUser">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConversationUser_Conversation">
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="ConversationUser" Type="Self.ConversationUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="idConversation" />
+            </Principal>
+            <Dependent Role="ConversationUser">
+              <PropertyRef Name="idConversation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_UserProfile1">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="idFriend" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Message_UserProfile">
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="idConversation" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="idConversation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NuntiusDBModelStoreContainer">
+          <EntitySet Name="Conversation" EntityType="Self.Conversation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationUser" EntityType="Self.ConversationUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friendship" EntityType="Self.Friendship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ConversacionUsuario_ConversacionUsuario" Association="Self.FK_ConversacionUsuario_ConversacionUsuario">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="ConversationUser" EntitySet="ConversationUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConversationUser_Conversation" Association="Self.FK_ConversationUser_Conversation">
+            <End Role="Conversation" EntitySet="Conversation" />
+            <End Role="ConversationUser" EntitySet="ConversationUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_UserProfile" Association="Self.FK_Friendship_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_UserProfile1" Association="Self.FK_Friendship_UserProfile1">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Message_UserProfile" Association="Self.FK_Message_UserProfile">
+            <End Role="Conversation" EntitySet="Conversation" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NuntiusDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="NuntiusDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ConversationUser" EntityType="NuntiusDBModel.ConversationUser" />
+          <EntitySet Name="Friendship" EntityType="NuntiusDBModel.Friendship" />
+          <EntitySet Name="UserProfile" EntityType="NuntiusDBModel.UserProfile" />
+          <AssociationSet Name="FK_ConversacionUsuario_ConversacionUsuario" Association="NuntiusDBModel.FK_ConversacionUsuario_ConversacionUsuario">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="ConversationUser" EntitySet="ConversationUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_UserProfile" Association="NuntiusDBModel.FK_Friendship_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <EntitySet Name="Conversation" EntityType="NuntiusDBModel.Conversation" />
+          <EntitySet Name="Message" EntityType="NuntiusDBModel.Message" />
+          <AssociationSet Name="FK_ConversationUser_Conversation" Association="NuntiusDBModel.FK_ConversationUser_Conversation">
+            <End Role="Conversation" EntitySet="Conversation" />
+            <End Role="ConversationUser" EntitySet="ConversationUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Message_UserProfile" Association="NuntiusDBModel.FK_Message_UserProfile">
+            <End Role="Conversation" EntitySet="Conversation" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_UserProfile1" Association="NuntiusDBModel.FK_Friendship_UserProfile1">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="ConversationUser">
+          <Key>
+            <PropertyRef Name="idConversationUser" />
+          </Key>
+          <Property Name="idConversationUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idUser" Type="Int32" Nullable="false" />
+          <Property Name="idConversation" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="NuntiusDBModel.FK_ConversacionUsuario_ConversacionUsuario" FromRole="ConversationUser" ToRole="UserProfile" />
+          <NavigationProperty Name="Conversation" Relationship="NuntiusDBModel.FK_ConversationUser_Conversation" FromRole="ConversationUser" ToRole="Conversation" />
+        </EntityType>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="idFriendship" />
+          </Key>
+          <Property Name="idFriendship" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idUser" Type="Int32" Nullable="false" />
+          <Property Name="idFriend" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="NuntiusDBModel.FK_Friendship_UserProfile" FromRole="Friendship" ToRole="UserProfile" />
+          <NavigationProperty Name="UserProfile1" Relationship="NuntiusDBModel.FK_Friendship_UserProfile1" FromRole="Friendship" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="points" Type="Int32" />
+          <NavigationProperty Name="ConversationUser" Relationship="NuntiusDBModel.FK_ConversacionUsuario_ConversacionUsuario" FromRole="UserProfile" ToRole="ConversationUser" />
+          <NavigationProperty Name="Friendship" Relationship="NuntiusDBModel.FK_Friendship_UserProfile" FromRole="UserProfile" ToRole="Friendship" />
+          <NavigationProperty Name="Friendship1" Relationship="NuntiusDBModel.FK_Friendship_UserProfile1" FromRole="UserProfile" ToRole="Friendship" />
+        </EntityType>
+        <Association Name="FK_ConversacionUsuario_ConversacionUsuario">
+          <End Type="NuntiusDBModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="NuntiusDBModel.ConversationUser" Role="ConversationUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="ConversationUser">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_UserProfile">
+          <End Type="NuntiusDBModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="NuntiusDBModel.Friendship" Role="Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="idConversation" />
+          </Key>
+          <Property Name="idConversation" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ConversationUser" Relationship="NuntiusDBModel.FK_ConversationUser_Conversation" FromRole="Conversation" ToRole="ConversationUser" />
+          <NavigationProperty Name="Conversation1" Relationship="NuntiusDBModel.FK_Message_UserProfile" FromRole="Conversation" ToRole="Message" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="idMessage" />
+          </Key>
+          <Property Name="idMessage" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idSender" Type="Int32" Nullable="false" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idConversation" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Conversation" Relationship="NuntiusDBModel.FK_Message_UserProfile" FromRole="Message" ToRole="Conversation" />
+        </EntityType>
+        <Association Name="FK_ConversationUser_Conversation">
+          <End Type="NuntiusDBModel.Conversation" Role="Conversation" Multiplicity="1" />
+          <End Type="NuntiusDBModel.ConversationUser" Role="ConversationUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="idConversation" />
+            </Principal>
+            <Dependent Role="ConversationUser">
+              <PropertyRef Name="idConversation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Message_UserProfile">
+          <End Type="NuntiusDBModel.Conversation" Role="Conversation" Multiplicity="1" />
+          <End Type="NuntiusDBModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="idConversation" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="idConversation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_UserProfile1">
+          <End Type="NuntiusDBModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="NuntiusDBModel.Friendship" Role="Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="idFriend" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NuntiusDBModelStoreContainer" CdmEntityContainer="NuntiusDBEntities">
+          <EntitySetMapping Name="ConversationUser">
+            <EntityTypeMapping TypeName="NuntiusDBModel.ConversationUser">
+              <MappingFragment StoreEntitySet="ConversationUser">
+                <ScalarProperty Name="idConversation" ColumnName="idConversation" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="idConversationUser" ColumnName="idConversationUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friendship">
+            <EntityTypeMapping TypeName="NuntiusDBModel.Friendship">
+              <MappingFragment StoreEntitySet="Friendship">
+                <ScalarProperty Name="idFriend" ColumnName="idFriend" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="idFriendship" ColumnName="idFriendship" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfile">
+            <EntityTypeMapping TypeName="NuntiusDBModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="points" ColumnName="points" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conversation">
+            <EntityTypeMapping TypeName="NuntiusDBModel.Conversation">
+              <MappingFragment StoreEntitySet="Conversation">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="idConversation" ColumnName="idConversation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Message">
+            <EntityTypeMapping TypeName="NuntiusDBModel.Message">
+              <MappingFragment StoreEntitySet="Message">
+                <ScalarProperty Name="idConversation" ColumnName="idConversation" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="idSender" ColumnName="idSender" />
+                <ScalarProperty Name="idMessage" ColumnName="idMessage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

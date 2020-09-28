@@ -1,0 +1,9 @@
+Luffy$Nami#Robin
+Nami$Robin#Luffy
+Guts$Killua#Robin
+Killua$Guts
+Robin$Guts#Luffy#Nami
+Selene$Alina#Geralt
+Alina$Selene#Geralt
+Geralt$Alina#Selene
+Makoto$
